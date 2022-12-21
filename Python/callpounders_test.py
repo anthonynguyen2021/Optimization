@@ -1,9 +1,5 @@
 import numpy as np
-
-
 from calFun import calFun
-
-
 from pounders import pounders
 
 
@@ -15,7 +11,8 @@ n = 2
 # X0 [dbl] [min(fstart,1)-by-n] Set of initial points  (zeros(1,n))
 X0 = np.zeros((10, 2))
 X0[0, :] = 0.5 * np.ones((1, 2))
-mpmax = int(0.5 * (n+1) * (n+2))
+mpmax = int(0.5 * (n + 1) * (n + 2))
+
 # nfmax [int] Maximum number of function evaluations (>n+1) (100)
 nfmax = 60
 # gtol [dbl] Tolerance for the 2-norm of the model gradient (1e-4)
@@ -28,6 +25,7 @@ nfs = 10
 m = 3
 # F0 [dbl] [fstart-by-1] Set of known function values  ([])
 F0 = np.zeros((10, 2))
+
 # xind [int] Index of point in X0 at which to start from (1)
 xind = 0
 # Low [dbl] [1-by-n] Vector of lower bounds (-Inf(1,n))
@@ -39,7 +37,9 @@ printf = True
 spsolver = 2  # What is addpath('ming5/') ?
 np.random.seed(1)
 F0[0, :] = func(X0[0, :])
+
 for i in range(1, 10):
     X0[i, :] = X0[0, :] + 0.2 * np.random.rand(1, 2) - 0.1
     F0[i, :] = func(X0[i, :])
+
 [X, F, flag, xkin] = pounders(func, X0, n, mpmax, nfmax, gtol, delta, nfs, m, F0, xind, Low, Upp, printf)

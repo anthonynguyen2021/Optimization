@@ -1,15 +1,18 @@
+from scipy.io import loadmat
 import numpy as np
+import unittest
+import sys
 
-
+sys.path.append('Python/')
 from formquad import formquad
 
 
-from scipy.io import loadmat
+class Test_formquad(unittest.TestCase):
 
-
-class Test_formquad:
     # Line 136 Pounders.m from callpounders.m using default X0 in callpounders.m
     def test_formquad1(self):
+
+        # Variables generation
         dictionaryData = loadmat('formquadCallPounders.mat')
         X = dictionaryData['X']
         F = dictionaryData['F']
@@ -26,16 +29,22 @@ class Test_formquad:
         G = dictionaryData['G']
         H = dictionaryData['H']
         Mind = dictionaryData['Mind']
+
+        # Output generation from formquad
         [MdirOut, mpOut, validOut, GOut, HOut, MindOut] = formquad(X, F, delta, xkin, mpmax, Pars, vf)
-        assert mpOut == mp
-        assert np.shape(GOut) == np.shape(G)
-        assert np.shape(HOut) == np.shape(H)
-        assert MindOut == Mind
-        assert validOut == valid
-        assert np.linalg.norm(MdirOut - Mdir, 'fro') < 10 ** -10
+
+        # tests check for correctness
+        self.assertTrue(mpOut == mp)
+        self.assertTrue(np.shape(GOut) == np.shape(G))
+        self.assertTrue(np.shape(HOut) == np.shape(H))
+        self.assertTrue(MindOut == Mind)
+        self.assertTrue(validOut == valid)
+        self.assertTrue(np.linalg.norm(MdirOut - Mdir, 'fro') < 10 ** -10)
 
     # Line 154 Pounders.m from callpounders.m using default X0 in callpounders.m
     def test_formquad2(self):
+
+        # Variables generation
         dictionaryData = loadmat('formquadCallPounders2.mat')
         X = dictionaryData['X']
         F = dictionaryData['F']
@@ -51,15 +60,21 @@ class Test_formquad:
         Gres = dictionaryData['Gres']
         Hresdel = dictionaryData['Hresdel']
         Mind = dictionaryData['Mind']
+
+        # Output generation from formquad
         [_, mpOut, validOut, GOut, HOut, MindOut] = formquad(X, F, delta, xkin, mpmax, Pars, vf)
-        assert mpOut == mp
-        assert np.linalg.norm(Gres - GOut) < 10 ** -10
-        assert np.linalg.norm(Hresdel - HOut) < 10 ** -10
-        assert sum(MindOut - Mind) == 0  # Check indices are the same
-        assert validOut == valid
+
+        # tests check for correctness
+        self.assertTrue(mpOut == mp)
+        self.assertTrue(np.linalg.norm(Gres - GOut) < 10 ** -10)
+        self.assertTrue(np.linalg.norm(Hresdel - HOut) < 10 ** -10)
+        self.assertTrue(sum(MindOut - Mind) == 0)  # Check indices are the same
+        self.assertTrue(validOut == valid)
 
     # Line 192 Pounders.m from callpounders.m using default X0 in callpounders.m
     def test_formquad3(self):
+
+        # Variables generation
         dictionaryData = loadmat('formquadCallPounders3.mat')
         X = dictionaryData['X']
         F = dictionaryData['F']
@@ -76,16 +91,22 @@ class Test_formquad:
         H = dictionaryData['H']
         Mind = dictionaryData['Mind']
         Mdir = dictionaryData['Mdir']
+
+        # Output generation from formquad
         [MdirOut, mpOut, validOut, GOut, HOut, MindOut] = formquad(X, F, delta, xkin, mpmax, Pars, vf)
-        assert mpOut == mp
-        assert np.linalg.norm(G - GOut) < 10 ** -10
-        assert np.linalg.norm(H - HOut) < 10 ** -10
-        assert sum(abs(MindOut - Mind)) == 0
-        assert validOut == valid
-        assert np.linalg.norm(Mdir - MdirOut, 'fro') < 10 ** -10
+
+        # tests check for correctness
+        self.assertTrue(mpOut == mp)
+        self.assertTrue(np.linalg.norm(G - GOut) < 10 ** -10)
+        self.assertTrue(np.linalg.norm(H - HOut) < 10 ** -10)
+        self.assertTrue(sum(abs(MindOut - Mind)) == 0)
+        self.assertTrue(validOut == valid)
+        self.assertTrue(np.linalg.norm(Mdir - MdirOut, 'fro') < 10 ** -10)
 
     # Line 205 Pounders.m from callpounders.m using default X0 in callpounders.m
     def test_formquad4(self):
+
+        # Variables generation
         dictionaryData = loadmat('formquadCallPounders4.mat')
         X = dictionaryData['X']
         F = dictionaryData['F']
@@ -102,10 +123,18 @@ class Test_formquad:
         H = dictionaryData['H']
         Mind = dictionaryData['Mind']
         Mdir = dictionaryData['Mdir']
+
+        # Output generation from formquad
         [MdirOut, mpOut, validOut, GOut, HOut, MindOut] = formquad(X, F, delta, xkin, mpmax, Pars, vf)
-        assert mpOut == mp - 1
-        assert np.linalg.norm(G - GOut) < 10 ** -10
-        assert np.linalg.norm(H - HOut) < 10 ** -10
-        assert sum(abs(MindOut - (Mind-1))) == 0
-        assert validOut == valid
-        assert np.linalg.norm(Mdir - MdirOut, 'fro') < 10 ** -10
+
+        # tests check for correctness
+        self.assertTrue(mpOut == mp - 1)
+        self.assertTrue(np.linalg.norm(G - GOut) < 10 ** -10)
+        self.assertTrue(np.linalg.norm(H - HOut) < 10 ** -10)
+        self.assertTrue(sum(abs(MindOut - (Mind-1))) == 0)
+        self.assertTrue(validOut == valid)
+        self.assertTrue(np.linalg.norm(Mdir - MdirOut, 'fro') < 10 ** -10)
+
+
+if __name__ == '__main__':
+    unittest.main()
